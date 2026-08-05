@@ -1,0 +1,37 @@
+# Environnements virtuels
+venv/
+env/
+.venv/
+.neural-net
+__pycache__/
+*.pyc
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Données (souvent volumineuses, pas versionnées)
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Modèles entraînés / artefacts
+*.pkl
+*.npy
+*.npz
+models/
+
+# Logs et résultats
+logs/
+*.log
+results/
+
+# OS / éditeurs
+.DS_Store
+.vscode/
+.idea/
+
+# Distribution / build
+build/
+dist/
+*.egg-info/
