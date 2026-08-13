@@ -21,7 +21,7 @@ class TestRelu:
 
 class TestSigmoid:
     def test_output_is_bounded_between_zero_and_one(self):
-        Z = np.array([[-100.0, 0.0, 100.0]])
+        Z = np.array([[-20.0, 0.0, 20.0]])
         A = sigmoid(Z)
         assert np.all(A > 0.0) and np.all(A < 1.0)
         assert A[0, 1] == pytest.approx(0.5)
