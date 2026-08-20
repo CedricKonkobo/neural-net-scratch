@@ -3,6 +3,7 @@
 import numpy as np
 
 from src.network import NeuralNetwork
+from src.optimizers import SGD, Adam
 from src.preprocessing import one_hot_encode
 
 
@@ -18,7 +19,7 @@ class TestNetworkForward:
 
 
 class TestNetworkTraining:
-    def test_overfits_a_tiny_batch(self):
+    def test_overfits_a_tiny_batch_with_sgd(self):
         """
         A network unable to drive the loss near zero on a handful of samples
         signals a bug in forward/backward/update. Fast, deterministic
@@ -33,7 +34,28 @@ class TestNetworkTraining:
         history = net.train(
             X_train=X, y_train_onehot=y_onehot, y_train=y,
             X_val=X, y_val_onehot=y_onehot, y_val=y,
-            epochs=200, batch_size=8, learning_rate=0.5, verbose=False,
+            epochs=200, batch_size=8,
+            optimizer=SGD(learning_rate=0.5),
+            verbose=False,
+        )
+
+        assert history["train_loss"][-1] < 0.05
+        assert history["train_acc"][-1] == 1.0
+
+    def test_overfits_a_tiny_batch_with_adam(self):
+        """Same sanity check, but validating the Adam integration path."""
+        rng = np.random.default_rng(0)
+        X = rng.standard_normal((8, 10))
+        y = rng.integers(0, 3, size=8)
+        y_onehot = one_hot_encode(y, num_classes=3)
+
+        net = NeuralNetwork(layer_dims=[10, 16, 3], seed=1)
+        history = net.train(
+            X_train=X, y_train_onehot=y_onehot, y_train=y,
+            X_val=X, y_val_onehot=y_onehot, y_val=y,
+            epochs=100, batch_size=8,
+            optimizer=Adam(learning_rate=0.05),
+            verbose=False,
         )
 
         assert history["train_loss"][-1] < 0.05

@@ -25,7 +25,7 @@ import numpy as np
 from src.activations import softmax
 from src.layers import Dense
 from src.losses import cross_entropy_loss, cross_entropy_softmax_backward
-
+from src.optimizers import SGD, Optimizer
 logger = logging.getLogger(__name__)
 
 
@@ -120,22 +120,8 @@ class NeuralNetwork:
         for layer in reversed(self.layers):
             dZ = layer.backward(dZ)
 
-    # ------------------------------------------------------------------
-    # Parameter updates (plain gradient descent — replaced by an
-    # Optimizer class in optimizers.py)
-    # ------------------------------------------------------------------
-    def _update_params(self, learning_rate: float) -> None:
-        """
-        Apply one step of vanilla gradient descent to every layer's
-        parameters, using the gradients computed by the last backward()
-        call.
-
-        Args:
-            learning_rate: Step size for the parameter update.
-        """
-        for layer in self.layers:
-            layer.W -= learning_rate * layer.dW
-            layer.b -= learning_rate * layer.db
+    
+    
 
     # ------------------------------------------------------------------
     # Inference / evaluation
@@ -203,7 +189,7 @@ class NeuralNetwork:
         y_val: np.ndarray,
         epochs: int = 20,
         batch_size: int = 64,
-        learning_rate: float = 0.1,
+        optimizer: Optional[Optimizer] = None,
         seed: int = 42,
         verbose: bool = True,
     ) -> Dict[str, List[float]]:
@@ -216,15 +202,19 @@ class NeuralNetwork:
             X_val, y_val_onehot, y_val: Same, for the validation set.
             epochs: Number of full passes over the training data.
             batch_size: Number of samples per mini-batch.
-            learning_rate: Step size for gradient descent updates.
+            optimizer: An Optimizer instance (SGD or Adam) responsible for
+                updating layer parameters from their gradients. Defaults
+                to plain SGD(learning_rate=0.1) if not provided.
             seed: Random seed controlling mini-batch shuffling order.
             verbose: If True, log loss/accuracy after every epoch.
 
         Returns:
             history: Dict with keys "train_loss", "train_acc", "val_loss",
-                "val_acc", each a list with one entry per epoch — ready to
-                be plotted with matplotlib in a later step.
+                "val_acc", each a list with one entry per epoch.
         """
+        if optimizer is None:
+            optimizer = SGD(learning_rate=0.1)
+
         rng = np.random.default_rng(seed)
         history: Dict[str, List[float]] = {
             "train_loss": [],
@@ -239,10 +229,8 @@ class NeuralNetwork:
             ):
                 self.forward(X_batch)
                 self.backward(y_batch)
-                self._update_params(learning_rate)
+                optimizer.update(self.layers)
 
-            # End-of-epoch metrics, computed on the FULL train/val sets
-            # (not just the last mini-batch) for accurate monitoring.
             train_pred = self.forward(X_train)
             train_loss = cross_entropy_loss(train_pred, y_train_onehot)
             train_acc = float(np.mean(np.argmax(train_pred, axis=1) == y_train))
@@ -263,4 +251,4 @@ class NeuralNetwork:
                     f"val_loss: {val_loss:.4f} val_acc: {val_acc:.4f}"
                 )
 
-        return history 
+        return history
