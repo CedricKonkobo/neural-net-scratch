@@ -22,9 +22,10 @@ data/processed/*
 models/
 
 # Logs et résultats
-logs/
-*.log
-results/
+logs/*
+!logs/.gitkeep
+results/*
+!results/.gitkeep
 
 # OS / éditeurs
 .DS_Store
@@ -35,3 +36,4 @@ results/
 build/
 dist/
 *.egg-info/
+
