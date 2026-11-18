@@ -1,5 +1,4 @@
-<!-- Add assets/banner.png (1280 × 400), then uncomment the next line. -->
-<!-- <img src="assets/banner.png" alt="Multiclass neural network from scratch in NumPy" width="100%"> -->
+<img src="assets/banner.png" alt="Neural network from scratch in NumPy: forward pass, backpropagation and Adam derived by hand" width="100%">
 
 # Multiclass neural network from scratch in NumPy
 
@@ -7,6 +6,11 @@ A fully-connected neural network for multiclass classification, written with Num
 
 ![Status](https://img.shields.io/badge/status-core%20implemented-1E5BD8?style=flat-square)
 ![Python](https://img.shields.io/badge/Python-3.10-102A6E?style=flat-square&logo=python&logoColor=white)
+![Tests](https://img.shields.io/badge/tests-46_unit_tests-102A6E?style=flat-square&logo=pytest&logoColor=white)
+
+[![Method](https://img.shields.io/badge/Method-Equations-102A6E?style=for-the-badge)](#method)
+[![Tests](https://img.shields.io/badge/Unit_tests-46-1E5BD8?style=for-the-badge)](tests/)
+[![Source](https://img.shields.io/badge/Source-NumPy_only-102A6E?style=for-the-badge&logo=numpy&logoColor=white)](src/)
 
 <p align="center">
   <img src="assets/forward_backward.png" alt="Forward and backward pass" width="90%">
@@ -112,4 +116,4 @@ neural-net-scratch/
 
 ---
 
-**Cédric Konkobo** · AI & Data Engineering, ENSAM Rabat · [GitHub](https://github.com/CedricKonkobo)
+**Cédric Konkobo** · AI & Data Engineering, ENSAM Rabat · [GitHub](https://github.com/CedricKonkobo) · [LinkedIn](https://www.linkedin.com/in/VOTRE-PROFIL)
